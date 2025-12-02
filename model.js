@@ -47,5 +47,28 @@ export function initializeGrid() {
     }
     // Randomize the inner walls
     innerWalls = shuffle(innerWalls);
+    // TODO: Brug vores egen queue her i stedet for et vanilla array
+}
 
+function isOuterWall(row, col) {
+    return row === 0 || col === 0 || row === grid.rows - 1 || col === grid.cols - 1;
+}
+
+export function isVerticalWall(row, col) {
+    if (row < 1 || row >= grid.rows - 1) return true;
+    return grid.north({row, col}).value === WALL && grid.south({row, col}).value === WALL;
+}
+
+export function isHorizontalWall(row, col) {
+    if (col < 1 || col >= grid.cols - 1) return true;
+    return grid.east({row, col}).value === WALL && grid.west({row, col}).value === WALL;
+}
+
+export function removeWall(row, col) {
+    console.log(`Removing wall at ${row}, ${col}`)
+    writeCell(row, col, OPEN);
+}
+
+export function getNextInnerWall() {
+    return innerWalls.pop();
 }
