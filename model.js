@@ -4,12 +4,12 @@ import shuffle from './shuffle.js';
 
 const WALL = 1;
 const OPEN = 0;
-const grid = new Grid(7,7);
+const grid = new Grid(7,15);
 let innerWalls = [];
 const paths = new Set();
 
 export function readCell(row, col) {
-    return grid.get({ row, col });
+    return grid.get({ row, col }).value;
 }
 
 export function writeCell(row, col, value) {
@@ -35,12 +35,12 @@ export function initializeGrid() {
             if (row%2 === 0 || col%2 === 0) {
                 grid.set({ row, col }, WALL); // Initial walls
                 if (!isOuterWall(row, col)) {
-                    innerWalls.push({ row, col });
+                    innerWalls.push(grid.get({ row, col }));
                 }
             } else {
                 grid.set({ row, col }, OPEN); // Open space
                 const path = new Set();
-                path.add({ row, col });
+                path.add(grid.get({ row, col }));
                 paths.add(path);
             }
         }
@@ -71,4 +71,43 @@ export function removeWall(row, col) {
 
 export function getNextInnerWall() {
     return innerWalls.pop();
+}
+
+export function joinSetsAndAddWall(cellA, cellB, wall) {
+    let setA = findSetInSet(cellA, paths);
+    let setB = findSetInSet(cellB, paths);
+    
+    if (setA && setB && setA !== setB) {
+        let union = setA.union(setB);
+        paths.delete(setA);
+        paths.delete(setB);
+        removeWall(wall.row, wall.col);
+        union.add(wall);
+        paths.add(union);
+    }
+}
+
+export function inSameSet(cellA, cellB) {
+    let setA = findSetInSet(cellA, paths);
+    let setB = findSetInSet(cellB, paths);
+
+    return setA === setB;
+}
+
+/* 
+// searches through a set of sets to find the set containing 
+// the given cell
+// Tidskomplexitet: O(n*log(m)) hvor n er antal sæt og m er størrelsen af det største sæt
+// Set.has() er O(log m) i gennemsnit for et sæt med m elementer
+*/
+function findSetInSet(cellToFind, setOfSets) {
+    console.log(`Finding set containing cell: ${JSON.stringify(cellToFind)}`);
+    for (let set of setOfSets) {
+        console.log('Searching set:', set);
+        if (set.has(cellToFind)) {
+            console.log('Found in set:', set);
+            return set;
+        }
+    }
+    return null;    
 }
