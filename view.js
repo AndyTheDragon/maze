@@ -18,7 +18,31 @@ export function createGrid(gridModel) {
             grid.appendChild(cell);
         }
     }
+}
 
-    // Place walls on the edges
+export function updateGrid(gridModel) {
+    console.log('Updateing classlist on cells')
+    for (let row = 0; row < gridModel.getGridSize().rows; row++) {
+        for (let col = 0; col < gridModel.getGridSize().cols; col++) {
+            const cell = document.querySelector(`#cell-${row}-${col}`);
+            cell.classList.remove('wall', 'open', 'active', 'candidate')
+            if (gridModel.readCell(row, col) === 1) {
+                cell.classList.add('wall');
+            } else {
+                cell.classList.add('open');
+            }
+        }
+    }
+}
 
+export function setActiveCell(row, col) {
+    console
+    const previousActive = document.querySelector('.active');
+    if (previousActive) {
+        previousActive.classList.remove('active');
+    }
+    const cell = document.querySelector(`#cell-${row}-${col}`);
+    if (cell) {
+        cell.classList.add('active');
+    }
 }
