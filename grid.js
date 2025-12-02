@@ -52,7 +52,9 @@ export default class Grid {
   set({ row, col }, value) {
     const index = this.indexFor({ row, col });
     if (index !== undefined) {
-      this.#grid[index] = value;
+      let cell = this.rowColFor(index);
+      cell.value = value;
+      this.#grid[index] = cell;
     }
   }
 
@@ -61,10 +63,8 @@ export default class Grid {
     if (index === undefined) {
       return undefined;
     }
-    let value = this.#grid[index];
-    let cell = this.rowColFor(index);
-    cell.value = value;
-    return cell;
+    return this.#grid[index];
+    
   }
 
   south({ row, col }) {
@@ -72,10 +72,7 @@ export default class Grid {
     if (index === undefined) {
       return undefined;
     }
-    let value = this.#grid[index];
-    let cell = this.rowColFor(index);
-    cell.value = value;
-    return cell;
+    return this.#grid[index];
   }
 
   east({ row, col }) {
@@ -83,10 +80,7 @@ export default class Grid {
     if (index === undefined) {
       return undefined;
     }
-    let value = this.#grid[index];
-    let cell = this.rowColFor(index);
-    cell.value = value;
-    return cell;
+    return this.#grid[index];
   }
 
   west({ row, col }) {
@@ -94,10 +88,7 @@ export default class Grid {
     if (index === undefined) {
       return undefined;
     }
-    const value = this.#grid[index];
-    const cell = this.rowColFor(index);
-    cell.value = value;
-    return cell;
+    return this.#grid[index];
   }
 
   neighbours({ row, col }) {
