@@ -4,7 +4,7 @@ import shuffle from './shuffle.js';
 
 const WALL = 1;
 const OPEN = 0;
-const grid = new Grid(7,15);
+const grid = new Grid(35,35);
 let innerWalls = [];
 const paths = new Set();
 

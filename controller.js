@@ -44,6 +44,7 @@ function updateGrid() {
 }
 
 document.getElementById('generate').addEventListener('click', () => {
+    updateGrid();
     kruskalMaze();
 });
 
