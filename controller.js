@@ -9,6 +9,7 @@ function startController() {
     const cols = 7;
     model.initializeGrid();
     view.createGrid(model);
+    window.model = model; // For debugging purposes
 }
 
 function kruskalMaze() {
@@ -26,11 +27,16 @@ function kruskalMaze() {
     console.log(neighbors);
 
     if (!model.isVerticalWall(wall.row, wall.col)) {
-        model.removeWall(wall.row, wall.col)
+        console.log(`North neighbour: ${neighbors.north}, South neighbour: ${neighbors.south}`);
+        if (!model.inSameSet(neighbors.north, neighbors.south)) {
+            model.joinSetsAndAddWall(neighbors.north, neighbors.south, wall);
+        }
     }
     if (!model.isHorizontalWall(wall.row, wall.col)) {
-        model.removeWall(wall.row, wall.col)
-    }
+        if (!model.inSameSet(neighbors.east, neighbors.west)) {
+            model.joinSetsAndAddWall(neighbors.east, neighbors.west, wall);
+        }
+    }   
 }
 
 function updateGrid() {
