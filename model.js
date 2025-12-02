@@ -2,7 +2,9 @@
 import Grid from './grid.js';
 import shuffle from './shuffle.js';
 
-const grid = new Grid(25, 25);
+const WALL = 1;
+const OPEN = 0;
+const grid = new Grid(7,7);
 let innerWalls = [];
 const paths = new Set();
 
@@ -28,15 +30,17 @@ export function getNeighbors(row, col) {
 }
 
 export function initializeGrid() {
-    for (let r = 0; r < grid.rows; r++) {
-        for (let c = 0; c < grid.cols; c++) {
-            if (r%2 === 0 || c%2 === 0) {
-                grid.set({ row: r, col: c }, 1); // Initial walls
-                innerWalls.push({ row: r, col: c });
+    for (let row = 0; row < grid.rows; row++) {
+        for (let col = 0; col < grid.cols; col++) {
+            if (row%2 === 0 || col%2 === 0) {
+                grid.set({ row, col }, WALL); // Initial walls
+                if (!isOuterWall(row, col)) {
+                    innerWalls.push({ row, col });
+                }
             } else {
-                grid.set({ row: r, col: c }, 0); // Open space
+                grid.set({ row, col }, OPEN); // Open space
                 const path = new Set();
-                path.add({ row: r, col: c });
+                path.add({ row, col });
                 paths.add(path);
             }
         }
