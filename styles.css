@@ -4,7 +4,7 @@ body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-#info {
+#controls {
     width: fit-content;
     margin: 0 auto;
     color: #ddd;
@@ -17,7 +17,7 @@ body {
     /*border-left: 1px dashed darkgrey;
     border-top: 1px dashed darkgrey;*/
     width: fit-content;
-    margin: 20% auto;
+    margin: 40px auto;
     margin-bottom: 20px;
 }
 
