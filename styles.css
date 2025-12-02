@@ -14,20 +14,41 @@ body {
 
 #grid {
     display: grid;
-    grid-template-columns: repeat(10, max-content);
-    border-left: 1px dashed darkgrey;
-    border-top: 1px dashed darkgrey;
+    /*border-left: 1px dashed darkgrey;
+    border-top: 1px dashed darkgrey;*/
     width: fit-content;
     margin: 20% auto;
     margin-bottom: 20px;
 }
 
 .cell {
-    width: 64px;
+    /*width: 32px;*/
     aspect-ratio: 1 / 1;
     background-color: #777;
     border-right: 1px dashed darkgrey;
     border-bottom: 1px dashed darkgrey;
+    box-sizing: border-box;
+}
+
+.wall {
+    background-color: #6b6;
+}
+
+.active {
+    background-color: #6b96b6;
+}
+
+.northwall {
+    border-top: 1px solid #6b6;
+}
+.eastwall {
+    border-right: 1px solid #6b6;
+}
+.southwall {
+    border-bottom: 1px solid #6b6;
+}
+.westwall {
+    border-left: 1px solid #6b6;
 }
 
 .player {
