@@ -11,7 +11,7 @@ function startController() {
     view.createGrid(model);
     window.model = model; // For debugging purposes
 }
-let wall, neighbours, northSouthSets, eastWestSets, actionIndex = -1;
+let wall, neighbours, northSouthSets, eastWestSets, actionIndex = -1, timer;
 const actions = [
     {
         step: () => {wall = chooseRandomWall(); neighbours = model.getNeighbours(wall.row, wall.col);},
@@ -133,9 +133,18 @@ function updateGrid() {
     
 }
 
+function tick(){
+    updateGrid();
+    timer = setTimeout(tick, 500);
+}
+
 document.getElementById('generate').addEventListener('click', () => {
-    view.updateGrid(model);
-    kruskalMaze();
+    if (!timer){
+        tick();
+    } else {
+        clearTimeout(timer);
+        timer = null;
+    }
 });
 
 document.getElementById('step').addEventListener('click', () => {
