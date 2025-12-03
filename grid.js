@@ -74,7 +74,7 @@ export default class Grid {
     return this.get({row, col: col - 1});
   }
 
-  getNeighbors({ row, col }) {
+  getNeighbours({ row, col }) {
     return {
         north: this.north({ row, col }),
         east: this.east({ row, col }),

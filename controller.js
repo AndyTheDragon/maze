@@ -14,6 +14,21 @@ function startController() {
 
 function kruskalMaze() {
     // kig på en random væg der ikke er en ydervæg
+    const wall = chooseRandomWall();
+
+    // hvis nord-syd eller øst-vest ikke allerede hænger sammen, så fjern væggen
+    // og hægt de to sæt sammen
+    const neighbours = model.getNeighbours(wall.row, wall.col);
+    console.log(neighbours);
+
+    lookAtNeighbours([neighbours.north, neighbours.south]);
+    handleNorthSouthNeighbours(neighbours.north, neighbours.south, wall);
+
+    lookAtNeighbours([neighbours.east, neighbours.west]);
+    handleEastWestNeighbours(neighbours.east, neighbours.west, wall);
+}
+
+function chooseRandomWall(){
     const wall = model.getNextInnerWall();
     if (!wall) {
         model.setStartAndExit();
@@ -21,26 +36,46 @@ function kruskalMaze() {
         return;
     }
     view.setActiveCell(wall.row, wall.col);
+    
+    return wall;
+}
 
-    // hvis nord-syd eller øst-vest ikke allerede hænger sammen, så fjern væggen
-    // og hægt de to sæt sammen
-    const neighbors = model.getNeighbors(wall.row, wall.col);
-    console.log(neighbors);
+function lookAtNeighbours(neighbours){
+    view.markCells([neighbours[0], neighbours[1]]);
+}
 
+function handleNorthSouthNeighbours(north, south, wall){
     if (!model.isVerticalWall(wall.row, wall.col)) {
-        console.log(`North neighbour: ${neighbors.north}, South neighbour: ${neighbors.south}`);
-        if (!model.inSameSet(neighbors.north, neighbors.south)) {
-            model.joinSetsAndAddWall(neighbors.north, neighbors.south, wall);
+        let {result, setA, setB} = model.inSameSet(north, south);
+        view.markCells(setA);
+        view.markCells(setB);
+        if (!result) {
+            model.joinSetsAndAddWall(north, south, wall);
         }
+        return {setA, setB};
+    } else {
+        view.unmarkCells([north, south]);
+        return null;
     }
+}
+
+function handleEastWestNeighbours(east, west, wall){
     if (!model.isHorizontalWall(wall.row, wall.col)) {
-        if (!model.inSameSet(neighbors.east, neighbors.west)) {
-            model.joinSetsAndAddWall(neighbors.east, neighbors.west, wall);
+        let {result, setA, setB} = model.inSameSet(east, west);
+        view.markCells(setA);
+        view.markCells(setB);
+        if (!result) {
+            model.joinSetsAndAddWall(east, west, wall);
         }
-    }   
+        return {setA, setB};
+    } else {
+        view.unmarkCells([east, west]);
+        return null;
+    }
 }
 
 function updateGrid() {
+    //view.unmarkCells()
     view.updateGrid(model)
 }
 

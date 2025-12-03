@@ -3,7 +3,7 @@
 export function createGrid(gridModel) {
     const grid = document.querySelector('#grid');
     grid.style.gridTemplateRows = `repeat(${gridModel.getGridSize().rows}, 1fr)`;
-    grid.style.gridTemplateColumns = `repeat(${gridModel.getGridSize().cols}, minmax(32px, 1fr))`;
+    grid.style.gridTemplateColumns = `repeat(${gridModel.getGridSize().cols}, minmax(24px, 1fr))`;
 
     for (let r = 0; r < gridModel.getGridSize().rows; r++) {
         for (let c = 0; c < gridModel.getGridSize().cols; c++) {
@@ -36,7 +36,6 @@ export function updateGrid(gridModel) {
 }
 
 export function setActiveCell(row, col) {
-    console
     const previousActive = document.querySelector('.active');
     if (previousActive) {
         previousActive.classList.remove('active');
@@ -44,5 +43,23 @@ export function setActiveCell(row, col) {
     const cell = document.querySelector(`#cell-${row}-${col}`);
     if (cell) {
         cell.classList.add('active');
+    }
+}
+
+export function markCells(cells){
+    for (let cell of cells){
+        const div = document.querySelector(`#cell-${cell.row}-${cell.col}`)
+        if (div) {
+            div.classList.add('current');
+        }
+    }
+}
+
+export function unmarkCells(cells){
+    for (let cell of cells){
+        const div = document.querySelector(`#cell-${cell.row}-${cell.col}`)
+        if (div) {
+            div.classList.remove('current');
+        }
     }
 }
