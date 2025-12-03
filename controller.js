@@ -21,11 +21,25 @@ function kruskalMaze() {
     const neighbours = model.getNeighbours(wall.row, wall.col);
     console.log(neighbours);
 
+
     lookAtNeighbours([neighbours.north, neighbours.south]);
-    handleNorthSouthNeighbours(neighbours.north, neighbours.south, wall);
+    const northSouthSets = handleNorthSouthNeighbours(neighbours.north, neighbours.south, wall);
+    if (northSouthSets !== null){
+        unmarkSets([northSouthSets.setA, northSouthSets.setB]);
+    }
 
     lookAtNeighbours([neighbours.east, neighbours.west]);
-    handleEastWestNeighbours(neighbours.east, neighbours.west, wall);
+    const eastWestSets = handleEastWestNeighbours(neighbours.east, neighbours.west, wall);
+    if (eastWestSets !== null){
+        unmarkSets([eastWestSets.setA, eastWestSets.setB]);
+    }
+    
+}
+
+function unmarkSets(sets){
+    for (let set of sets){
+        view.unmarkCells(set);
+    }
 }
 
 function chooseRandomWall(){
