@@ -11,6 +11,42 @@ function startController() {
     view.createGrid(model);
     window.model = model; // For debugging purposes
 }
+let wall, neighbours, northSouthSets, eastWestSets, actionIndex = -1;
+const actions = [
+    {
+        step: () => {wall = chooseRandomWall(); neighbours = model.getNeighbours(wall.row, wall.col);},
+        description: "Look at a random wall"
+    },
+    {
+        step: () => lookAtNeighbours([neighbours.north, neighbours.south]),
+        description: "Look at North and South neighbours"
+    },
+    {
+        step: () => northSouthSets = handleNorthSouthNeighbours(neighbours.north, neighbours.south, wall),
+        description: "If neighbours are paths and in different sets - remove wall and join sets"
+    },
+    {
+        step: () => {if (northSouthSets !== null){
+                        unmarkSets([northSouthSets.setA, northSouthSets.setB]);}
+                    },
+        description: "unmark sets if not null"
+    },
+    {
+        step: () => lookAtNeighbours([neighbours.east, neighbours.west]),
+        description: "Look at East and West neighbours"
+    },
+    {
+        step: () => eastWestSets = handleEastWestNeighbours(neighbours.east, neighbours.west, wall),
+        description: "If neighbours are paths and in different sets - remove wall and join sets"        
+    },
+    {
+        step: () => {if (eastWestSets !== null){
+                        unmarkSets([eastWestSets.setA, eastWestSets.setB]);}
+                    },
+        description: "unmark sets if not null"
+    }
+];
+
 
 function kruskalMaze() {
     // kig på en random væg der ikke er en ydervæg
@@ -19,7 +55,6 @@ function kruskalMaze() {
     // hvis nord-syd eller øst-vest ikke allerede hænger sammen, så fjern væggen
     // og hægt de to sæt sammen
     const neighbours = model.getNeighbours(wall.row, wall.col);
-    console.log(neighbours);
 
 
     lookAtNeighbours([neighbours.north, neighbours.south]);
@@ -50,6 +85,7 @@ function chooseRandomWall(){
         return;
     }
     view.setActiveCell(wall.row, wall.col);
+    console.log(wall);
     
     return wall;
 }
@@ -89,12 +125,16 @@ function handleEastWestNeighbours(east, west, wall){
 }
 
 function updateGrid() {
-    //view.unmarkCells()
-    view.updateGrid(model)
+    view.updateGrid(model);
+    actionIndex++;
+    actionIndex = actionIndex%(actions.length);
+    actions[actionIndex].step();
+    console.log(actions[actionIndex].description);
+    
 }
 
 document.getElementById('generate').addEventListener('click', () => {
-    updateGrid();
+    view.updateGrid(model);
     kruskalMaze();
 });
 

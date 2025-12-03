@@ -25,7 +25,7 @@ export function updateGrid(gridModel) {
     for (let row = 0; row < gridModel.getGridSize().rows; row++) {
         for (let col = 0; col < gridModel.getGridSize().cols; col++) {
             const cell = document.querySelector(`#cell-${row}-${col}`);
-            cell.classList.remove('wall', 'open', 'active', 'candidate')
+            cell.classList.remove('wall', 'open')
             if (gridModel.readCell(row, col) === 1) {
                 cell.classList.add('wall');
             } else {
