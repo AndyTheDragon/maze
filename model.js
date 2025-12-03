@@ -4,7 +4,7 @@ import shuffle from './shuffle.js';
 
 const WALL = 1;
 const OPEN = 0;
-const grid = new Grid(35,35);
+const grid = new Grid(11,11);
 let innerWalls = [];
 const paths = new Set();
 
@@ -68,6 +68,13 @@ export function getNextInnerWall() {
     return innerWalls.pop();
 }
 
+export function setStartAndExit() {
+    const start = {row: 0, col: 1};
+    const exit = {row: this.getGridSize().rows - 1, col: this.getGridSize().cols - 2};
+    this.removeWall(start.row, start.col);
+    this.removeWall(exit.row, exit.col);
+}
+
 export function joinSetsAndAddWall(cellA, cellB, wall) {
     let setA = findSetInSet(cellA, paths);
     let setB = findSetInSet(cellB, paths);
@@ -106,3 +113,4 @@ function findSetInSet(cellToFind, setOfSets) {
     }
     return null;    
 }
+

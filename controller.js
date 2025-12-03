@@ -16,6 +16,7 @@ function kruskalMaze() {
     // kig på en random væg der ikke er en ydervæg
     const wall = model.getNextInnerWall();
     if (!wall) {
+        model.setStartAndExit();
         console.log("Maze generation complete");
         return;
     }

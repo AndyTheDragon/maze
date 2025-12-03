@@ -76,10 +76,10 @@ export default class Grid {
 
   getNeighbors({ row, col }) {
     return {
-        north: grid.north({ row, col }),
-        east: grid.east({ row, col }),
-        south: grid.south({ row, col }),
-        west: grid.west({ row, col }),
+        north: this.north({ row, col }),
+        east: this.east({ row, col }),
+        south: this.south({ row, col }),
+        west: this.west({ row, col }),
     };
 }
 
