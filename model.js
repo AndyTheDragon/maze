@@ -21,12 +21,7 @@ export function getGridSize() {
 }
 
 export function getNeighbors(row, col) {
-    return {
-        north: grid.north({ row, col }),
-        east: grid.east({ row, col }),
-        south: grid.south({ row, col }),
-        west: grid.west({ row, col }),
-    };
+    return grid.getNeighbors({ row, col });
 }
 
 export function initializeGrid() {

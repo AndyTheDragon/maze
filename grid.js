@@ -59,72 +59,29 @@ export default class Grid {
   }
 
   north({ row, col }) {
-    let index = this.indexFor({ row: row - 1, col });
-    if (index === undefined) {
-      return undefined;
-    }
-    return this.#grid[index];
-    
+    return this.get({row: row - 1, col});
   }
 
   south({ row, col }) {
-    let index = this.indexFor({ row: row + 1, col });
-    if (index === undefined) {
-      return undefined;
-    }
-    return this.#grid[index];
+    return this.get({row: row + 1, col});
   }
 
   east({ row, col }) {
-    let index = this.indexFor({ row, col: col + 1 });
-    if (index === undefined) {
-      return undefined;
-    }
-    return this.#grid[index];
+    return this.get({row, col: col + 1});
   }
 
   west({ row, col }) {
-    const index = this.indexFor({ row, col: col - 1 });
-    if (index === undefined) {
-      return undefined;
-    }
-    return this.#grid[index];
+    return this.get({row, col: col - 1});
   }
 
-  neighbours({ row, col }) {
-    if (this.indexFor({ row, col }) === undefined) return [];
-
-    const neighbors = [];
-    for (let dr = -1; dr <= 1; dr++) {
-      for (let dc = -1; dc <= 1; dc++) {
-        if (dr === 0 && dc === 0) continue;
-        const r = row + dr;
-        const c = col + dc;
-        const idx = this.indexFor({ row: r, col: c });
-        if (idx === undefined) continue;
-        neighbors.push({ row: r, col: c });
-      }
-    }
-    return neighbors;
-  }
-
-  neighbourValues({ row, col }) {
-    if (this.indexFor({ row, col }) === undefined) return [];
-
-    const neighbors = [];
-    for (let dr = -1; dr <= 1; dr++) {
-      for (let dc = -1; dc <= 1; dc++) {
-        if (dr === 0 && dc === 0) continue;
-        const r = row + dr;
-        const c = col + dc;
-        const idx = this.indexFor({ row: r, col: c });
-        if (idx === undefined) continue;
-
-        neighbors.push(this.#grid[idx]);
-      }
-    }
-    return neighbors;
-  }
+  getNeighbors({ row, col }) {
+    return {
+        north: grid.north({ row, col }),
+        east: grid.east({ row, col }),
+        south: grid.south({ row, col }),
+        west: grid.west({ row, col }),
+    };
+}
 
   nextInRow({ row, col }) {
     return this.east({ row, col });
