@@ -68,6 +68,12 @@ function kruskalMaze() {
     if (eastWestSets !== null){
         unmarkSets([eastWestSets.setA, eastWestSets.setB]);
     }
+
+    if (model.isMazeComplete()) {
+        model.setStartAndExit();
+        console.log("Maze generation complete");
+        return;
+    }
     
 }
 
@@ -79,11 +85,6 @@ function unmarkSets(sets){
 
 function chooseRandomWall(){
     const wall = model.getNextInnerWall();
-    if (!wall) {
-        model.setStartAndExit();
-        console.log("Maze generation complete");
-        return;
-    }
     view.setActiveCell(wall.row, wall.col);
     console.log(wall);
     
@@ -134,8 +135,13 @@ function updateGrid() {
 }
 
 function tick(){
-    updateGrid();
-    timer = setTimeout(tick, 500);
+    view.updateGrid(model);
+    if (!model.isMazeComplete()) {
+        kruskalMaze()
+        timer = setTimeout(tick, 50);
+    } else {
+        timer = null;
+    }
 }
 
 document.getElementById('generate').addEventListener('click', () => {

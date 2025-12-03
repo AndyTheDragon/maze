@@ -4,7 +4,7 @@ import shuffle from './shuffle.js';
 
 const WALL = 1;
 const OPEN = 0;
-const grid = new Grid(11,11);
+const grid = new Grid(41, 87);
 let innerWalls = [];
 const paths = new Set();
 
@@ -68,6 +68,9 @@ export function getNextInnerWall() {
     return innerWalls.pop();
 }
 
+export function isMazeComplete(){
+    return paths.size === 1 || innerWalls.size === 0;
+}
 export function setStartAndExit() {
     const start = {row: 0, col: 1};
     const exit = {row: this.getGridSize().rows - 1, col: this.getGridSize().cols - 2};
