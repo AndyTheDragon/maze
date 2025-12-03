@@ -20,8 +20,8 @@ export function getGridSize() {
     return { rows: grid.rows, cols: grid.cols };
 }
 
-export function getNeighbors(row, col) {
-    return grid.getNeighbors({ row, col });
+export function getNeighbours(row, col) {
+    return grid.getNeighbours({ row, col });
 }
 
 export function initializeGrid() {
@@ -51,16 +51,16 @@ function isOuterWall(row, col) {
 
 export function isVerticalWall(row, col) {
     if (row < 1 || row >= grid.rows - 1) return true;
-    return grid.north({row, col}).value === WALL && grid.south({row, col}).value === WALL;
+    return grid.north({row, col}).value === WALL || grid.south({row, col}).value === WALL;
 }
 
 export function isHorizontalWall(row, col) {
     if (col < 1 || col >= grid.cols - 1) return true;
-    return grid.east({row, col}).value === WALL && grid.west({row, col}).value === WALL;
+    return grid.east({row, col}).value === WALL || grid.west({row, col}).value === WALL;
 }
 
 export function removeWall(row, col) {
-    console.log(`Removing wall at ${row}, ${col}`)
+
     writeCell(row, col, OPEN);
 }
 
@@ -76,24 +76,26 @@ export function setStartAndExit() {
 }
 
 export function joinSetsAndAddWall(cellA, cellB, wall) {
-    let setA = findSetInSet(cellA, paths);
-    let setB = findSetInSet(cellB, paths);
+    const setA = findSetInSet(cellA, paths);
+    const setB = findSetInSet(cellB, paths);
     
     if (setA && setB && setA !== setB) {
         let union = setA.union(setB);
         paths.delete(setA);
         paths.delete(setB);
         removeWall(wall.row, wall.col);
-        union.add(wall);
+        union.add(grid.get({row: wall.row, col: wall.col}));
         paths.add(union);
     }
 }
 
 export function inSameSet(cellA, cellB) {
-    let setA = findSetInSet(cellA, paths);
-    let setB = findSetInSet(cellB, paths);
+    const setA = findSetInSet(cellA, paths);
+    const setB = findSetInSet(cellB, paths);
 
-    return setA === setB;
+    const result = setA === setB;
+
+    return {result, setA, setB};
 }
 
 /* 
@@ -103,11 +105,11 @@ export function inSameSet(cellA, cellB) {
 // Set.has() er O(log m) i gennemsnit for et sæt med m elementer
 */
 function findSetInSet(cellToFind, setOfSets) {
-    console.log(`Finding set containing cell: ${JSON.stringify(cellToFind)}`);
+
     for (let set of setOfSets) {
-        console.log('Searching set:', set);
+    
         if (set.has(cellToFind)) {
-            console.log('Found in set:', set);
+            //console.log("Found set for cell:", cellToFind, set);
             return set;
         }
     }
