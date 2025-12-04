@@ -47,7 +47,9 @@ const actions = [
     }
 ];
 
-
+/*
+// Tidskomplexitet for algoritme: O(i*p*log(m)) hvor p er antal sæt i paths og m er størrelsen af det største sæt
+*/
 function kruskalMaze() {
     // kig på en random væg der ikke er en ydervæg
     const wall = chooseRandomWall();
@@ -81,6 +83,10 @@ function unmarkSets(sets){
     }
 }
 
+/*
+// Tidskomplexitet for algortime: O(1)
+// for visualisering: O(n)
+*/
 function chooseRandomWall(){
     const wall = model.getNextInnerWall();
     view.setActiveCell(wall.row, wall.col);
@@ -90,7 +96,10 @@ function chooseRandomWall(){
 function lookAtNeighbours(neighbours){
     view.markCells([neighbours[0], neighbours[1]]);
 }
-
+/*
+// Tidskomplexitet: O(n*log(m)) hvor n er antal sæt i paths og m er størrelsen af det største sæt
+// Visualisering: O(n^2)
+*/
 function handleNorthSouthNeighbours(north, south, wall){
     if (!model.isVerticalWall(wall.row, wall.col)) {
         let {result, setA, setB} = model.inSameSet(north, south);
@@ -121,19 +130,17 @@ function handleEastWestNeighbours(east, west, wall){
     }
 }
 
-function updateGrid() {
+function takeActionStep() {
     view.updateGrid(model);
     actionIndex++;
     actionIndex = actionIndex%(actions.length);
     actions[actionIndex].step();
     console.log(actions[actionIndex].description);
-    
 }
 
 function devTick(){
-    //view.updateGrid(model);
     if (!model.isMazeComplete()) {
-        updateGrid();
+        takeActionStep();
         timer = setTimeout(devTick, 150);
     } else {
         timer = null;
@@ -169,7 +176,7 @@ document.getElementById('autostep').addEventListener('click', () => {
 });
 
 document.getElementById('step').addEventListener('click', () => {
-    updateGrid();
+    takeActionStep();
 });
 
 startController();

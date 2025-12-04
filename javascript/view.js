@@ -1,8 +1,12 @@
 "use strict";
 
-const WALL = 1;
-const OPEN = 0;
+import { WALL, OPEN } from './constants.js';
 
+
+/* 
+// Adds the grid to the DOM 
+// O(n) where n is the number of cells in the grid
+*/
 export function createGrid(gridModel) {
     const grid = document.querySelector('#grid');
     grid.style.gridTemplateRows = `repeat(${gridModel.getGridSize().rows}, 1fr)`;
@@ -23,6 +27,10 @@ export function createGrid(gridModel) {
     }
 }
 
+/* 
+// Removes all walls from the grid, and draws them again
+// O(n) where n is the number of cells in the grid
+*/
 export function updateGrid(gridModel) {
     for (let row = 0; row < gridModel.getGridSize().rows; row++) {
         for (let col = 0; col < gridModel.getGridSize().cols; col++) {
@@ -37,17 +45,29 @@ export function updateGrid(gridModel) {
     }
 }
 
+/* 
+// Paints the active cell in the grid by removing the 'active' class and adding it to the new cell
+// O(n) - because the querySelector is O(n) in the number of cells in the grid
+// From mdn: The matching is done using depth-first pre-order traversal of the document's nodes starting 
+// with the first element in the document's markup and iterating through sequential nodes by order of the number of child nodes.
+*/
 export function setActiveCell(row, col) {
+    // if there is a blue active cell, remove the blue highlight
     const previousActive = document.querySelector('.active');
     if (previousActive) {
         previousActive.classList.remove('active');
     }
+    // add blue highlight to the new active cell
     const cell = document.querySelector(`#cell-${row}-${col}`);
     if (cell) {
         cell.classList.add('active');
     }
 }
 
+/* 
+// Paints cells in the grid by adding the 'current' class
+// O(n*m) where n is the number of cells to mark, and m is the number of cells in the grid
+*/
 export function markCells(cells){
     if (!cells) {
         console.error("unmarkCells called with null or undefined cells");
@@ -61,6 +81,11 @@ export function markCells(cells){
     }
 }
 
+
+/* 
+// Removes the 'current' class
+// O(n*m) where n is the number of cells to mark, and m is the number of cells in the grid
+*/
 export function unmarkCells(cells){
     if (!cells) {
         console.error("unmarkCells called with null or undefined cells");

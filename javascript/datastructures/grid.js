@@ -21,10 +21,16 @@ export default class Grid {
     return this.#rows * this.#cols;
   }
 
+  /* 
+  // Tidskomplexitet: O(n) 
+  */
   fill(value) {
     this.#grid.fill(value);
   }
 
+  /* 
+  // Tidskomplexitet: O(1) 
+  */
   indexFor({ row, col }) {
     if (row < 0 || row >= this.#rows || col < 0 || col >= this.#cols) {
       return undefined;
@@ -32,6 +38,9 @@ export default class Grid {
     return row * this.#cols + col;
   }
 
+  /* 
+  // Tidskomplexitet: O(1) 
+  */
   rowColFor(index) {
     if (index < 0 || index >= this.size) {
       return undefined;
@@ -41,6 +50,9 @@ export default class Grid {
     return { row, col };
   }
 
+  /* 
+  // Tidskomplexitet: O(1) 
+  */
   get({ row, col }) {
     const index = this.indexFor({ row, col });
     if (index === undefined) {
@@ -49,6 +61,9 @@ export default class Grid {
     return this.#grid[index];
   }
 
+  /* 
+  // Tidskomplexitet: O(1) 
+  */
   set({ row, col }, value) {
     const index = this.indexFor({ row, col });
     if (index !== undefined) {
