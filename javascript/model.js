@@ -3,9 +3,9 @@ import Grid from './datastructures/grid.js';
 import shuffle from './algorithms/shuffle.js';
 import { WALL, OPEN } from './constants.js';
 
-const grid = new Grid(31, 43);
+let grid;
 let innerWalls = [];
-const paths = new Set();
+let paths = new Set();
 
 
 /* 
@@ -34,7 +34,10 @@ export function getNeighbours(row, col) {
 // Tidskomplexitet: O(n) hvor n er antal celler i vores grid
 // Afhænger dog af implementationen af Set i JavaScript 
 */
-export function initializeGrid() {
+export function initializeGrid(rows, cols) {
+    grid = new Grid(rows, cols);
+    innerWalls = [];
+    paths = new Set();
     for (let row = 0; row < grid.rows; row++) {
         for (let col = 0; col < grid.cols; col++) {
             if (row%2 === 0 || col%2 === 0) {

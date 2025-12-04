@@ -5,9 +5,9 @@ import * as model from './model.js';
 
 function startController() {
     console.log("Controller started");
-    const rows = 7;
-    const cols = 7;
-    model.initializeGrid();
+    let rows = document.getElementById('rows').valueAsNumber;
+    let cols = document.getElementById('cols').valueAsNumber;
+    model.initializeGrid(rows, cols);
     view.createGrid(model);
     window.model = model; // For debugging purposes
 }
@@ -94,7 +94,7 @@ function chooseRandomWall(){
 }
 
 function lookAtNeighbours(neighbours){
-    view.markCells([neighbours[0], neighbours[1]]);
+    view.markCells([neighbours[0], neighbours[1]], 'green');
 }
 /*
 // Tidskomplexitet: O(n*log(m)) hvor n er antal sæt i paths og m er størrelsen af det største sæt
@@ -104,7 +104,7 @@ function handleNorthSouthNeighbours(north, south, wall){
     if (!model.isVerticalWall(wall.row, wall.col)) {
         let {result, setA, setB} = model.inSameSet(north, south);
         view.markCells(setA);
-        view.markCells(setB);
+        view.markCells(setB, 'orange');
         if (!result) {
             model.joinSetsAndAddWall(north, south, wall);
         }
@@ -119,7 +119,7 @@ function handleEastWestNeighbours(east, west, wall){
     if (!model.isHorizontalWall(wall.row, wall.col)) {
         let {result, setA, setB} = model.inSameSet(east, west);
         view.markCells(setA);
-        view.markCells(setB);
+        view.markCells(setB, 'orange');
         if (!result) {
             model.joinSetsAndAddWall(east, west, wall);
         }
@@ -179,4 +179,13 @@ document.getElementById('step').addEventListener('click', () => {
     takeActionStep();
 });
 
-startController();
+document.getElementById('reset').addEventListener('click', () => {
+    if (timer){
+        clearTimeout(timer);
+        timer = null;
+    }
+    actionIndex = -1;
+    startController();
+});
+
+window.addEventListener('load', startController);

@@ -38,43 +38,12 @@ body {
     background-color: #6b96b6;
 }
 
-.northwall {
-    border-top: 1px solid #6b6;
-}
-.eastwall {
-    border-right: 1px solid #6b6;
-}
-.southwall {
-    border-bottom: 1px solid #6b6;
-}
-.westwall {
-    border-left: 1px solid #6b6;
-}
-
-.player {
+.markgreen {
     background-color: #6b6;
 }
-
-.current {
+.markyellow {
     background-color: #cc6;
 }
-
-#pauseOverlay {
-    display: none;
-    position: fixed;
-    inset: 0; /* top:0; right:0; bottom:0; left:0; */
-    background: rgba(0,0,0,0.5);
-    color: #fff;
-    font-weight: 700;
-    font-size: 2.25rem;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-    pointer-events: none; /* allow keyboard input to still reach document */
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-}
-
-#pauseOverlay.visible {
-    display: flex;
+.markorange {
+    background-color: #c96;
 }

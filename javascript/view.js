@@ -9,6 +9,7 @@ import { WALL, OPEN } from './constants.js';
 */
 export function createGrid(gridModel) {
     const grid = document.querySelector('#grid');
+    grid.innerHTML = ''; // Clear previous grid if any
     grid.style.gridTemplateRows = `repeat(${gridModel.getGridSize().rows}, 1fr)`;
     grid.style.gridTemplateColumns = `repeat(${gridModel.getGridSize().cols}, minmax(24px, 1fr))`;
 
@@ -68,15 +69,15 @@ export function setActiveCell(row, col) {
 // Paints cells in the grid by adding the 'current' class
 // O(n*m) where n is the number of cells to mark, and m is the number of cells in the grid
 */
-export function markCells(cells){
+export function markCells(cells, color='yellow'){
     if (!cells) {
-        console.error("unmarkCells called with null or undefined cells");
+        console.error("markCells called with null or undefined cells");
         return;
     };
     for (let cell of cells){
         const div = document.querySelector(`#cell-${cell.row}-${cell.col}`)
         if (div) {
-            div.classList.add('current');
+            div.classList.add(`mark${color}`);
         }
     }
 }
@@ -94,7 +95,7 @@ export function unmarkCells(cells){
     for (let cell of cells){
         const div = document.querySelector(`#cell-${cell.row}-${cell.col}`)
         if (div) {
-            div.classList.remove('current');
+            div.classList.remove('markyellow', 'markorange', 'markgreen');
         }
     }
 }
