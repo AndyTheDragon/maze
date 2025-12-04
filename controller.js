@@ -57,13 +57,11 @@ function kruskalMaze() {
     const neighbours = model.getNeighbours(wall.row, wall.col);
 
 
-    lookAtNeighbours([neighbours.north, neighbours.south]);
     const northSouthSets = handleNorthSouthNeighbours(neighbours.north, neighbours.south, wall);
     if (northSouthSets !== null){
         unmarkSets([northSouthSets.setA, northSouthSets.setB]);
     }
 
-    lookAtNeighbours([neighbours.east, neighbours.west]);
     const eastWestSets = handleEastWestNeighbours(neighbours.east, neighbours.west, wall);
     if (eastWestSets !== null){
         unmarkSets([eastWestSets.setA, eastWestSets.setB]);
@@ -134,10 +132,20 @@ function updateGrid() {
     
 }
 
+function devTick(){
+    //view.updateGrid(model);
+    if (!model.isMazeComplete()) {
+        updateGrid();
+        timer = setTimeout(devTick, 150);
+    } else {
+        timer = null;
+    }
+}
+
 function tick(){
     view.updateGrid(model);
-    if (!model.isMazeComplete()) {
-        kruskalMaze()
+    if(!model.isMazeComplete()){
+        kruskalMaze();
         timer = setTimeout(tick, 50);
     } else {
         timer = null;
@@ -147,6 +155,15 @@ function tick(){
 document.getElementById('generate').addEventListener('click', () => {
     if (!timer){
         tick();
+    } else {
+        clearTimeout(timer);
+        timer = null;
+    }
+})
+
+document.getElementById('autostep').addEventListener('click', () => {
+    if (!timer){
+        devTick();
     } else {
         clearTimeout(timer);
         timer = null;
