@@ -15,7 +15,7 @@ let wall, neighbours, northSouthSets, eastWestSets, actionIndex = -1, timer;
 const actions = [
     {
         step: () => {wall = chooseRandomWall(); neighbours = model.getNeighbours(wall.row, wall.col);},
-        description: "Look at a random wall"
+        description: `Looking at a random wall at (${wall?.row}, ${wall?.col})`
     },
     {
         step: () => lookAtNeighbours([neighbours.north, neighbours.south]),
@@ -84,8 +84,6 @@ function unmarkSets(sets){
 function chooseRandomWall(){
     const wall = model.getNextInnerWall();
     view.setActiveCell(wall.row, wall.col);
-    console.log(wall);
-    
     return wall;
 }
 

@@ -8,7 +8,7 @@ const grid = new Grid(31, 43);
 let innerWalls = [];
 const paths = new Set();
 
-export function readCell(row, col) {
+export function readCellValue(row, col) {
     return grid.get({ row, col }).value;
 }
 
@@ -42,7 +42,6 @@ export function initializeGrid() {
     }
     // Randomize the inner walls
     innerWalls = shuffle(innerWalls);
-    // TODO: Brug vores egen queue her i stedet for et vanilla array
 }
 
 function isOuterWall(row, col) {
@@ -69,13 +68,13 @@ export function getNextInnerWall() {
 }
 
 export function isMazeComplete(){
-    return paths.size === 1 || innerWalls.size === 0;
+    return paths.size === 1 || innerWalls.length === 0;
 }
 export function setStartAndExit() {
     const start = {row: 0, col: 1};
-    const exit = {row: this.getGridSize().rows - 1, col: this.getGridSize().cols - 2};
-    this.removeWall(start.row, start.col);
-    this.removeWall(exit.row, exit.col);
+    const exit = {row: getGridSize().rows - 1, col: getGridSize().cols - 2};
+    removeWall(start.row, start.col);
+    removeWall(exit.row, exit.col);
 }
 
 export function joinSetsAndAddWall(cellA, cellB, wall) {
@@ -108,11 +107,8 @@ export function inSameSet(cellA, cellB) {
 // Set.has() er O(log m) i gennemsnit for et sæt med m elementer
 */
 function findSetInSet(cellToFind, setOfSets) {
-
     for (let set of setOfSets) {
-    
         if (set.has(cellToFind)) {
-            //console.log("Found set for cell:", cellToFind, set);
             return set;
         }
     }

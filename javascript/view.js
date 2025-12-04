@@ -1,5 +1,8 @@
 "use strict";
 
+const WALL = 1;
+const OPEN = 0;
+
 export function createGrid(gridModel) {
     const grid = document.querySelector('#grid');
     grid.style.gridTemplateRows = `repeat(${gridModel.getGridSize().rows}, 1fr)`;
@@ -10,7 +13,7 @@ export function createGrid(gridModel) {
             const cell = document.createElement('div');
             cell.classList.add('cell');
             cell.id = `cell-${r}-${c}`;
-            if (gridModel.readCell(r, c) === 1) {
+            if (gridModel.readCellValue(r, c) === WALL) {
                 cell.classList.add('wall');
             } else {
                 cell.classList.add('open');
@@ -21,12 +24,11 @@ export function createGrid(gridModel) {
 }
 
 export function updateGrid(gridModel) {
-    console.log('Updateing classlist on cells')
     for (let row = 0; row < gridModel.getGridSize().rows; row++) {
         for (let col = 0; col < gridModel.getGridSize().cols; col++) {
             const cell = document.querySelector(`#cell-${row}-${col}`);
-            cell.classList.remove('wall', 'open')
-            if (gridModel.readCell(row, col) === 1) {
+            cell.classList.remove('wall', 'open');
+            if (gridModel.readCellValue(row, col) === WALL) {
                 cell.classList.add('wall');
             } else {
                 cell.classList.add('open');
@@ -47,6 +49,10 @@ export function setActiveCell(row, col) {
 }
 
 export function markCells(cells){
+    if (!cells) {
+        console.error("unmarkCells called with null or undefined cells");
+        return;
+    };
     for (let cell of cells){
         const div = document.querySelector(`#cell-${cell.row}-${cell.col}`)
         if (div) {
@@ -56,6 +62,10 @@ export function markCells(cells){
 }
 
 export function unmarkCells(cells){
+    if (!cells) {
+        console.error("unmarkCells called with null or undefined cells");
+        return;
+    };
     for (let cell of cells){
         const div = document.querySelector(`#cell-${cell.row}-${cell.col}`)
         if (div) {
