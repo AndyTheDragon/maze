@@ -1,6 +1,6 @@
 "use strict";
-import Grid from './grid.js';
-import shuffle from './shuffle.js';
+import Grid from './datastructures/grid.js';
+import shuffle from './algorithms/shuffle.js';
 
 const WALL = 1;
 const OPEN = 0;
