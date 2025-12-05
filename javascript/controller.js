@@ -7,6 +7,8 @@ function startController() {
     console.log("Controller started");
     let rows = document.getElementById('rows').valueAsNumber;
     let cols = document.getElementById('cols').valueAsNumber;
+    if (rows % 2 === 0) rows += 1; // Ensure odd dimensions
+    if (cols % 2 === 0) cols += 1;
     model.initializeGrid(rows, cols);
     view.createGrid(model);
     window.model = model; // For debugging purposes
