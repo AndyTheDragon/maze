@@ -95,7 +95,21 @@ export function unmarkCells(cells){
     for (let cell of cells){
         const div = document.querySelector(`#cell-${cell.row}-${cell.col}`)
         if (div) {
-            div.classList.remove('markyellow', 'markorange', 'markgreen');
+            div.classList.remove('markyellow', 'markorange', 'markgreen', 'active');
         }
     }
+}
+
+export function addToLog(message){
+    const logDiv = document.getElementById('algo-log');
+    const p = document.createElement('p');
+    p.textContent = message;
+    logDiv.appendChild(p);
+    logDiv.scrollTop = logDiv.scrollHeight;
+ 
+}
+
+export function clearLog(){
+    const logDiv = document.getElementById('algo-log');
+    logDiv.innerHTML = '';
 }

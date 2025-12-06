@@ -7,45 +7,41 @@ function startController() {
     console.log("Controller started");
     let rows = document.getElementById('rows').valueAsNumber;
     let cols = document.getElementById('cols').valueAsNumber;
+    if (isNaN(rows) || rows < 5) rows = 5;
+    if (isNaN(cols) || cols < 5) cols = 5;
     if (rows % 2 === 0) rows += 1; // Ensure odd dimensions
     if (cols % 2 === 0) cols += 1;
     model.initializeGrid(rows, cols);
     view.createGrid(model);
     window.model = model; // For debugging purposes
 }
-let wall, neighbours, northSouthSets, eastWestSets, actionIndex = -1, timer;
+
+let wall, neighbours, northSouthSets, eastWestSets = null, actionIndex = -1, timer;
 const actions = [
     {
-        step: () => {wall = chooseRandomWall(); neighbours = model.getNeighbours(wall.row, wall.col);},
-        description: `Looking at a random wall at (${wall?.row}, ${wall?.col})`
+        step: () => {
+                        if (eastWestSets !== null){ unmarkSets([eastWestSets.setA, eastWestSets.setB]);}
+                        wall = chooseRandomWall(); 
+                        neighbours = model.getNeighbours(wall.row, wall.col);
+                    },
+        description() { return `Looking at a random wall at (${wall?.row}, ${wall?.col})`; }
     },
     {
         step: () => lookAtNeighbours([neighbours.north, neighbours.south]),
-        description: "Look at North and South neighbours"
+        description() { return "Look at North and South neighbours"; }
     },
     {
         step: () => northSouthSets = handleNorthSouthNeighbours(neighbours.north, neighbours.south, wall),
-        description: "If neighbours are paths and in different sets - remove wall and join sets"
+        description() { return northSouthSets === null ? "One neighbour is wall - do nothing" : northSouthSets?.result ? "North and South neighbours are in the same set - do nothing" : "North and South neighbours are in different sets - remove wall and join sets"; }
     },
     {
-        step: () => {if (northSouthSets !== null){
-                        unmarkSets([northSouthSets.setA, northSouthSets.setB]);}
-                    },
-        description: "unmark sets if not null"
-    },
-    {
-        step: () => lookAtNeighbours([neighbours.east, neighbours.west]),
-        description: "Look at East and West neighbours"
+        step: () => { if (northSouthSets !== null) { unmarkSets([northSouthSets.setA, northSouthSets.setB]);}
+                      lookAtNeighbours([neighbours.east, neighbours.west]) },
+        description() { return "Look at East and West neighbours"; }
     },
     {
         step: () => eastWestSets = handleEastWestNeighbours(neighbours.east, neighbours.west, wall),
-        description: "If neighbours are paths and in different sets - remove wall and join sets"        
-    },
-    {
-        step: () => {if (eastWestSets !== null){
-                        unmarkSets([eastWestSets.setA, eastWestSets.setB]);}
-                    },
-        description: "unmark sets if not null"
+        description() { return eastWestSets === null ? "One neighbour is wall - do nothing" : eastWestSets?.result ? "East and West neighbours are in the same set - do nothing" : "East and West neighbours are in different sets - remove wall and join sets"; }        
     }
 ];
 
@@ -54,7 +50,7 @@ const actions = [
 */
 function kruskalMaze() {
     // kig på en random væg der ikke er en ydervæg
-    const wall = chooseRandomWall();
+    wall = chooseRandomWall();
 
     // hvis nord-syd eller øst-vest ikke allerede hænger sammen, så fjern væggen
     // og hægt de to sæt sammen
@@ -104,13 +100,13 @@ function lookAtNeighbours(neighbours){
 */
 function handleNorthSouthNeighbours(north, south, wall){
     if (!model.isVerticalWall(wall.row, wall.col)) {
-        let {result, setA, setB} = model.inSameSet(north, south);
-        view.markCells(setA);
-        view.markCells(setB, 'orange');
-        if (!result) {
+        let inSameSet = model.inSameSet(north, south);
+        view.markCells(inSameSet.setA);
+        view.markCells(inSameSet.setB, 'orange');
+        if (!inSameSet.result) {
             model.joinSetsAndAddWall(north, south, wall);
         }
-        return {setA, setB};
+        return inSameSet;
     } else {
         view.unmarkCells([north, south]);
         return null;
@@ -125,7 +121,7 @@ function handleEastWestNeighbours(east, west, wall){
         if (!result) {
             model.joinSetsAndAddWall(east, west, wall);
         }
-        return {setA, setB};
+        return {result, setA, setB};
     } else {
         view.unmarkCells([east, west]);
         return null;
@@ -137,7 +133,14 @@ function takeActionStep() {
     actionIndex++;
     actionIndex = actionIndex%(actions.length);
     actions[actionIndex].step();
-    console.log(actions[actionIndex].description);
+    view.addToLog(actions[actionIndex].description());
+    console.log(actions[actionIndex].description());
+    if (model.isMazeComplete()) {
+        model.setStartAndExit();
+        view.addToLog("Maze generation complete");
+        console.log("Maze generation complete");
+        view.unmarkCells([wall]);
+    }
 }
 
 function devTick(){
@@ -145,6 +148,7 @@ function devTick(){
         takeActionStep();
         timer = setTimeout(devTick, 150);
     } else {
+        view.unmarkCells([wall]);
         timer = null;
     }
 }
@@ -155,6 +159,7 @@ function tick(){
         kruskalMaze();
         timer = setTimeout(tick, 50);
     } else {
+        view.unmarkCells([wall]);
         timer = null;
     }
 }
@@ -187,6 +192,7 @@ document.getElementById('reset').addEventListener('click', () => {
         timer = null;
     }
     actionIndex = -1;
+    view.clearLog();
     startController();
 });
 

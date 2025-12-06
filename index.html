@@ -4,29 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maze generation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Maze Generation</h1>
-        <div id="grid">
-            <!-- Maze grid will be generated here -->
-        </div>
-        <div id="controls">
-            <div>
-                <button id="generate">Run Maze Generator</button>
-                <button id="autostep">Auto Step</button>
-                <button id ="step">Single Step</button>
+        <h1>Maze Generation with Randomized Kruskal</h1>
+        <div class="row h-100">
+
+            <div class="col h-100 d-inline-block">
+                <div class="row" id="grid"> 
+                <!-- Maze grid will be generated here -->
+                </div>
+                <div class="row mt-3" id="controls">
+                    <div>
+                        <button class="btn btn-primary" id="generate">Run Maze Generator</button>
+                        <button class="btn btn-success" id="autostep">Auto Step</button>
+                        <button class="btn btn-info" id ="step">Single Step</button>
+                    </div>
+                    <div class="mx-auto mt-3" style="width: fit-content;">
+                        <div class="row">
+                            <div class="col-auto">
+                                <label class="form-label" for="rows">Rows:</label>
+                                <input class="form-control" type="number" id="rows" value="31" min="11" max="49" step="2">
+                            </div>
+                            <div class="col-auto">
+                                <label class="form-label" for="cols">Columns:</label>
+                                <input class="form-control" type="number" id="cols" value="43" min="11" max="87" step="2">
+                            </div>
+                            <div class="col-auto align-self-end">
+                                <button class="btn btn-info" id="reset">Reset Maze</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <p>This algorithm is a randomized version of Kruskal's algorithm.</p>
+                    <ol>
+                        <li>Create a list of all walls, and create a set for each cell, each containing just that one cell.</li>
+                        <li>While there is more than one set:<br> For each wall, in some random order:
+                            <ol>
+                                <li>If the cells divided by this wall belong to distinct sets:
+                                    <ol>
+                                        <li>Remove the current wall.</li>
+                                        <li>Join the sets of the formerly divided cells.</li>
+                                    </ol>
+                                </li>
+                            </ol>
+                        </li>
+                    </ol>
+                    <div>
+                        <strong>References:</strong>
+                        <ul>
+                            <li><a href="https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_Kruskal's_algorithm" target="_blank">Wikipedia: Maze generation algorithm - Randomized Kruskal's algorithm</a></li>
+                        </ul>
+                    </div>   
+                </div>
             </div>
-            <div style="margin-top: 1rem;">
-                <label for="rows">Rows:</label>
-                <input type="number" id="rows" value="31" min="11" max="49" step="2">
-                <label for="cols">Columns:</label>
-                <input type="number" id="cols" value="43" min="11" max="87" step="2">
-                <button id="reset">Reset Maze</button>
+            <div class="col overflow-y-scroll" style="height: 66vh" id="algo-log">
+                
+                
             </div>
         </div>
+        
     </div>
     <script src="javascript/controller.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>
