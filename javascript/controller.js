@@ -196,4 +196,12 @@ document.getElementById('reset').addEventListener('click', () => {
     startController();
 });
 
+const logContainer = document.getElementById('log-container');
+const toggleLogButton = document.getElementById('toggle-log');
+
+toggleLogButton.addEventListener('click', () => {
+    const isHidden = logContainer.classList.toggle('d-none');
+    toggleLogButton.textContent = isHidden ? 'Show Log' : 'Hide Log';
+});
+
 window.addEventListener('load', startController);
