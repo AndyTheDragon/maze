@@ -1,9 +1,10 @@
 # Randomized Kruskal Maze Generation
 
+<img src="Maze.png" alt="Maze" width="35%">
+
 Github: https://github.com/AndyTheDragon/maze
+
 Deployed: https://andythedragon.github.io/maze/
-
-
 
 ## Authors
 Frederik Franck | MojoOno | cph-ff72@stud.ek.dk 
